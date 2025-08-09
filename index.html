@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>김형곤 | 포트폴리오</title>
+  <style>
+    :root { --max: 1100px; }
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Malgun Gothic,sans-serif;line-height:1.6;color:#111}
+    header{padding:64px 20px;background:#111;color:#fff}
+    .wrap{max-width:var(--max);margin:0 auto}
+    nav{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px}
+    nav a{color:#9ad;margin-right:8px;text-decoration:none}
+    h1{margin:0;font-size:40px}
+    section{padding:56px 20px;border-top:1px solid #eee}
+    h2{margin:0 0 20px;font-size:28px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .card{border:1px solid #eee;border-radius:16px;padding:18px}
+    .skills span{display:inline-block;border:1px solid #ddd;border-radius:999px;padding:6px 10px;margin:6px 8px 0 0;font-size:14px}
+    footer{padding:32px 20px;background:#fafafa;border-top:1px solid #eee}
+    a.btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid #ddd;text-decoration:none}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>김형곤 | Backend & Full‑stack</h1>
+      <p>Spring Boot · MyBatis/JPA · MariaDB · React</p>
+      <nav>
+        <a href="#about">소개</a>
+        <a href="#projects">프로젝트</a>
+        <a href="#skills">기술</a>
+        <a href="#contact">연락처</a>
+        <a class="btn" href="https://github.com/gudrhs8304" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="wrap">
+      <h2>소개</h2>
+      <p>실무형 프로젝트로 역량을 키우고 있는 백엔드 지향 풀스택 개발자입니다. 
+      Spring Boot + MyBatis/JPA, MariaDB를 중심으로 REST API와 관리자/사용자 기능을 구현했습니다.</p>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <h2>프로젝트</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>🍔 햄버거 키오스크</h3>
+          <p>주문/결제, 관리자 메뉴·재고·매출 통계. Spring Boot + MyBatis + Thymeleaf.</p>
+          <p><a class="btn" href="#" target="_blank">코드 보기</a></p>
+        </article>
+        <article class="card">
+          <h3>🎬 Ticketory</h3>
+          <p>영화 예매(상영시간·좌석·QR티켓). Spring Boot + React + MariaDB.</p>
+          <p><a class="btn" href="#" target="_blank">코드 보기</a></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <h2>기술</h2>
+      <p class="skills">
+        <span>Java</span><span>Spring Boot</span><span>MyBatis</span><span>JPA</span>
+        <span>MariaDB</span><span>REST API</span><span>React</span><span>Bootstrap</span>
+        <span>Swagger</span><span>Git/GitHub</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2>연락처</h2>
+      <p>이메일: <a href="mailto:you@example.com">you@example.com</a></p>
+      <p>이력서(PDF): <a href="#" target="_blank">다운로드</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">© <span id="y"></span> Kim Hyeong‑Gon</div>
+  </footer>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
