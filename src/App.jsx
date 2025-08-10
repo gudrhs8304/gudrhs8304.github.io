@@ -4,6 +4,19 @@ import { Github, Mail, FileDown, ExternalLink, Code2, Star } from "lucide-react"
 import { FaJava, FaDatabase, FaProjectDiagram, FaReact, FaLeaf, FaGithub } from "react-icons/fa";
 import { SiSpringboot, SiMariadb, SiSwagger } from "react-icons/si";
 
+const TECH_ICON = {
+  Java: FaJava,
+  "Spring Boot": SiSpringboot,
+  MyBatis: FaDatabase,
+  JPA: FaDatabase,
+  MariaDB: SiMariadb,
+  "REST API": FaProjectDiagram,
+  React: FaReact,
+  Thymeleaf: FaLeaf,
+  Swagger: SiSwagger,
+  "Git/GitHub": FaGithub,
+};
+
 const CONFIG = {
   name: "김형곤",
   role: "Backend-leaning Full‑stack Developer",
@@ -191,9 +204,15 @@ export default function App() {
                 ))}
               </ul>
               <div className="mb-4 flex flex-wrap gap-2">
-                {p.tech.map((t) => (
-                  <Chip key={t}>{t}</Chip>
-                ))}
+                {p.tech.map((t) => {
+                  const Icon = TECH_ICON[t];
+                  return (
+                    <Chip key={t}>
+                      {Icon ? <Icon size={16} className="mr-1 align-[-2px] inline-block" aria-hidden /> : null}
+                      {t}
+                    </Chip>
+                  );
+                })}
               </div>
               <div className="flex gap-2">
                 {p.repo && (
@@ -249,7 +268,7 @@ export default function App() {
         <div className="flex flex-wrap gap-2">
           {CONFIG.skills.map((s) => (
             <Chip key={s.name}>
-              <s.icon className="inline-block mr-1" /> {s.name}
+              <s.icon size={16} className="mr-1 align-[-2px] inline-block" aria-hidden /> {s.name}
             </Chip>
           ))}
         </div>
