@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Github, Mail, FileDown, ExternalLink, Code2, Star } from "lucide-react";
+import { Github, Mail, FileDown, ExternalLink, Code2, Star, Sun, Moon } from "lucide-react";
 import { FaJava, FaDatabase, FaProjectDiagram, FaReact, FaLeaf, FaGithub } from "react-icons/fa";
 import { SiSpringboot, SiMariadb, SiSwagger } from "react-icons/si";
 
@@ -134,6 +134,25 @@ export default function App() {
   const { repos, loading } = useGithubRepos(CONFIG.githubUser);
   const year = useMemo(() => new Date().getFullYear(), []);
 
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return document.documentElement.classList.contains("dark");
+    }
+    return false;
+  });
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="min-h-screen scroll-smooth bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
       <header className="bg-zinc-950 px-4 py-16 text-white dark:bg-black">
@@ -149,6 +168,13 @@ export default function App() {
             <a href="#projects" className="text-zinc-300 hover:text-white">프로젝트</a>
             <a href="#skills" className="text-zinc-300 hover:text-white">기술</a>
             <a href="#contact" className="text-zinc-300 hover:text-white">연락처</a>
+            <button
+              onClick={toggleDarkMode}
+              className="inline-flex items-center gap-1 rounded-xl border border-zinc-700 px-3 py-2 text-sm hover:bg-zinc-900"
+            >
+              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+              {darkMode ? "라이트 모드" : "다크 모드"}
+            </button>
             <div className="flex flex-1 justify-end gap-2">
               <a
                 href={`https://github.com/${CONFIG.githubUser}`}
