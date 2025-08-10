@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 기본 폰트/색 보정 */
+html, body { height: 100%; }
