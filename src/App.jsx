@@ -319,7 +319,7 @@ export default function App() {
             className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 px-3 py-2 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
             href={CONFIG.resumePath}
           >
-            <FileDown size={18} /> 이력서 다운로드gg
+            <FileDown size={18} /> 이력서 다운로드ggㅎㅎㅎ
           </a>
         </div>
       </Section>
