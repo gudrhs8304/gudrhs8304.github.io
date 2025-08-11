@@ -357,39 +357,5 @@ export default function App() {
                 <div className="mx-auto max-w-5xl">© {year} {CONFIG.name}. All rights reserved.</div>
             </footer>
         </div>
-<<<<<<< HEAD
-      </Section>
-
-      <Section id="contact" title="연락처">
-        <div className="flex flex-wrap items-center gap-3 text-sm">
-          <a
-            className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 px-3 py-2 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
-            href={`mailto:${CONFIG.email}`}
-          >
-            <Mail size={18} /> {CONFIG.email}
-          </a>
-          <a
-            className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 px-3 py-2 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
-            href={`https://github.com/${CONFIG.githubUser}`}
-            target="_blank"
-          >
-            <Github size={18} /> @{CONFIG.githubUser}
-          </a>
-          <a
-            className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 px-3 py-2 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
-            href={CONFIG.resumePath}
-          >
-            <FileDown size={18} /> 이력서 다운로드ggㅎㅎㅎ
-          </a>
-        </div>
-      </Section>
-
-      <footer className="border-t border-zinc-200 px-4 py-10 text-sm text-zinc-500 dark:border-zinc-800">
-        <div className="mx-auto max-w-5xl">© {year} {CONFIG.name}. All rights reserved.</div>
-      </footer>
-    </div>
-  );
-=======
-    );
->>>>>>> cb68cc8 (메시지)
+      );
 }
