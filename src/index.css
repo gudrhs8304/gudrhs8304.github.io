@@ -1,0 +1,203 @@
+/* =========================================
+   THEME TOKENS (Light / Dark)
+   ========================================= */
+
+/* 기본: 라이트 */
+:root,
+body.light {
+    /* surfaces */
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --card-subtle: #f2f5f9;
+    --hero-from: #ffffff;            /* hero gradient start */
+    --hero-to: #f2f6ff;              /* hero gradient end */
+    --chip-bg: #eef2f7;
+    --tag-bg: #eef2f7;
+    --btn-bg: #ffffff;
+    --btn-bg-hover: #f6f8fb;
+    --ring: rgba(37, 99, 235, .18);
+
+    /* lines */
+    --border: #d8e1ea;
+
+    /* text */
+    --fg: #0f172a;
+    --muted: #475569;
+
+    /* accents */
+    --brand: #2563eb;
+    --brand2: #16a34a;
+
+    /* shadows */
+    --shadow-lg: 0 14px 30px rgba(15, 23, 42, .08);
+    --shadow-md: 0 8px 20px rgba(15, 23, 42, .06);
+}
+
+/* 다크 */
+body.dark {
+    --bg: #0b0c10;
+    --card: #0f1218;
+    --card-subtle: #0c1016;
+    --hero-from: #0f1218;
+    --hero-to: #0b0e14;
+    --chip-bg: #1b2230;
+    --tag-bg: #141a24;
+    --btn-bg: #10141b;
+    --btn-bg-hover: #0e1218;
+    --ring: rgba(59, 130, 246, .2);
+
+    --border: #1f2a3a;
+
+    --fg: #eaf0ff;
+    --muted: #a7b2c6;
+
+    --brand: #60a5fa;
+    --brand2: #22c55e;
+
+    --shadow-lg: 0 16px 36px rgba(0, 0, 0, .45);
+    --shadow-md: 0 10px 24px rgba(0, 0, 0, .35);
+}
+
+/* =========================================
+   Base
+   ========================================= */
+* { box-sizing: border-box }
+html, body, #root { height: 100% }
+body, #root {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans KR", Segoe UI, Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s ease, color .25s ease;
+}
+a { color: inherit; text-underline-offset: 3px }
+
+/* =========================================
+   Layout
+   ========================================= */
+.container { max-width: 1060px; margin: 0 auto; padding: 28px 20px 40px }
+.topbar { padding: 24px 0 8px }
+
+/* =========================================
+   Hero
+   ========================================= */
+.hero{
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background:
+            radial-gradient(1200px 420px at 85% -20%, color-mix(in oklab, var(--brand) 28%, transparent) 0%, transparent 60%),
+            linear-gradient(180deg, var(--hero-from), var(--hero-to));
+    box-shadow: var(--shadow-lg);
+}
+.title { display: flex; flex-direction: column; gap: 10px }
+.nameWrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap }
+.name {
+    margin: 0; font-weight: 900; letter-spacing: -0.02em;
+    font-size: clamp(28px, 4.8vw, 44px);
+    background: linear-gradient(92deg, var(--fg), color-mix(in oklab, var(--brand) 30%, var(--fg)) 60%, color-mix(in oklab, var(--brand) 45%, var(--fg)));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.avatar{
+    width: clamp(64px, 12vw, 96px); aspect-ratio: 1 / 1; border-radius: 50%; object-fit: cover;
+    border: 1px solid var(--border); background: var(--card-subtle);
+    box-shadow: var(--shadow-md);
+}
+.right { display: flex; gap: 8px; align-items: center }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap }
+
+/* =========================================
+   UI Atoms
+   ========================================= */
+.btn, .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 12px; font-size: 14px; border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--btn-bg);
+    color: var(--fg);
+    white-space: nowrap;
+    transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .08s ease;
+}
+.btn { border-radius: 12px; }
+.btn:hover { background: var(--btn-bg-hover); border-color: color-mix(in oklab, var(--border) 50%, var(--brand) 25%); box-shadow: 0 0 0 4px var(--ring) inset }
+.btn:active { transform: translateY(1px) }
+
+.chip {
+    border-radius: 999px;
+    background: var(--chip-bg);
+    color: var(--fg);
+}
+.pill {
+    color: color-mix(in oklab, var(--brand2) 80%, var(--fg));
+    border-color: color-mix(in oklab, var(--brand2) 55%, var(--border));
+    background: color-mix(in oklab, var(--brand2) 16%, var(--chip-bg));
+    font-weight: 600;
+}
+
+/* text helpers */
+.muted { color: var(--muted) }
+.link { text-decoration: none }
+
+/* =========================================
+   Sections
+   ========================================= */
+.section { padding: 32px 0 }
+.section h2 {
+    margin: 0 0 14px;
+    font-size: 18px; font-weight: 800; letter-spacing: .02em;
+    color: color-mix(in oklab, var(--fg) 88%, var(--brand) 12%);
+}
+.hr { height: 1px; border: 0; margin: 18px 0;
+    background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--border) 80%, var(--brand) 20%), transparent) }
+
+/* =========================================
+   Cards & Grid
+   ========================================= */
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(1, minmax(0, 1fr)) }
+@media (min-width: 780px){ .grid { grid-template-columns: repeat(2, 1fr) } }
+
+.card{
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 16px 16px 14px;
+    background: var(--card);
+    box-shadow: var(--shadow-md);
+    transition: transform .18s ease, border-color .2s ease, box-shadow .2s ease, background .25s ease;
+}
+.card:hover{
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--border) 55%, var(--brand) 35%);
+    box-shadow: var(--shadow-lg);
+}
+.card h3 { margin: 2px 0 6px; font-size: 17px; font-weight: 800 }
+
+/* tags */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px }
+.tag {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: color-mix(in oklab, var(--fg) 82%, var(--muted) 18%);
+    background: var(--tag-bg);
+    transition: background .25s ease, border-color .25s ease;
+}
+
+/* =========================================
+   Contact / Footer
+   ========================================= */
+.contact .btn { background: var(--btn-bg) }
+.footer {
+    border-top: 1px solid var(--border);
+    margin-top: 38px;
+    padding: 18px 0;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* =========================================
+   Utilities
+   ========================================= */
+.hidden { display: none }
