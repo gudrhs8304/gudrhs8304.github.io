@@ -39,7 +39,7 @@ const CONFIG = {
         {
             title: "Ticketory – 영화 예매",
             emoji: "🎬",
-            summary: "상영시간 · 좌석선택 · 예매 흐름",
+            summary: "상영시간 · 좌석선택 · 예매 흐름, BATCH 이용한 자동 상영시간 등록 예매가능 유무 자동 전환",
             tech: ["Spring Boot", "React", "MariaDB", "REST API", "Swagger"],
             repo: "https://github.com/gudrhs8304/ticketory_project",
         },
