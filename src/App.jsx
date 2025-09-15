@@ -67,6 +67,20 @@ const CONFIG = {
                 "React, JavaScript, CSS 기반 구현",
             ],
         },
+         {
+            title: "주차장관리시스템",
+            emoji: "🚘",
+            summary:
+                "주차관리 · MVC패턴 · JSP · 관리자 페이지",
+            tech: ["JAVA", "JSP"],
+            repo: "https://github.com/gudrhs8304/koreaitParkingSystem",
+            demo: "",
+            bullets: [
+                "주차장관리",
+                "입차, 출차, 할인, 요금계산",
+                "MVC 패턴, JSP 기반 구현",
+            ],
+        },
     ],
     skills: [
         {name: "Java", icon: FaJava},
