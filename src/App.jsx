@@ -3,6 +3,8 @@ import {motion} from "framer-motion";
 import {Code2, ExternalLink, FileDown, Github, Mail, Moon, Star, Sun, Phone} from "lucide-react";
 import {FaDatabase, FaGithub, FaJava, FaLeaf, FaProjectDiagram, FaReact} from "react-icons/fa";
 import {SiMariadb, SiSpringboot, SiSwagger} from "react-icons/si";
+import { SiApachetomcat } from "react-icons/si";
+import { RiFileCodeLine } from "react-icons/ri";
 
 const TECH_ICON = {
     Java: FaJava,
@@ -15,6 +17,7 @@ const TECH_ICON = {
     Thymeleaf: FaLeaf,
     Swagger: SiSwagger,
     "Git/GitHub": FaGithub,
+    JSP: SiApachetomcat,
 };
 
 const CONFIG = {
@@ -93,6 +96,7 @@ const CONFIG = {
         {name: "Thymeleaf", icon: FaLeaf},
         {name: "Swagger", icon: SiSwagger},
         {name: "Git/GitHub", icon: FaGithub},
+        { name: "JSP", icon: SiApachetomcat },
     ],
     seeking: "신입 백엔드 포지션 구직 중",
     repoSort: "recent",
