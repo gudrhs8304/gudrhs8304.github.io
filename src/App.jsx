@@ -1,6 +1,6 @@
-import {useEffect, useMemo, useState} from "react";
-import {motion} from "framer-motion";
-import {Code2, ExternalLink, FileDown, Github, Mail, Moon, Star, Sun, Phone} from "lucide-react";
+import {useEffect, useMemo, useState, useRef} from "react";
+import {motion, useScroll, useTransform, useSpring, useInView} from "framer-motion";
+import {Code2, ExternalLink, FileDown, Github, Mail, Moon, Star, Sun, Phone, Sparkles, Zap, Rocket} from "lucide-react";
 import {FaDatabase, FaGithub, FaJava, FaLeaf, FaProjectDiagram, FaReact} from "react-icons/fa";
 import {SiMariadb, SiSpringboot, SiSwagger} from "react-icons/si";
 import { SiApachetomcat } from "react-icons/si";
@@ -48,7 +48,7 @@ const CONFIG = {
             summary:
                 "상영시간 · 좌석 선택 · 예매 흐름(결제 시뮬). Spring Boot + React + MariaDB.",
             tech: ["Spring Boot", "React", "MariaDB", "REST API"],
-            repo: "https://github.com/gudrhs8304/ticketory",
+            repo: "https://github.com/gudrhs8304/ticketory_project",
             demo: "",
             bullets: [
                 "상영관/좌석 모델링, 예매 트랜잭션 처리",
@@ -102,6 +102,52 @@ const CONFIG = {
     repoSort: "recent",
     about: "끈기있게 소통하며 맡은일에 책임감있게 성과내는 소중한 인재",
 };
+
+// Floating particles background component
+function FloatingParticles() {
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-blue-400/30 rounded-full"
+                    style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                    }}
+                    animate={{
+                        y: [0, -30, 0],
+                        opacity: [0, 1, 0],
+                        scale: [0, 1.5, 0],
+                    }}
+                    transition={{
+                        duration: 3 + Math.random() * 2,
+                        repeat: Infinity,
+                        delay: Math.random() * 2,
+                    }}
+                />
+            ))}
+        </div>
+    );
+}
+
+// Typing animation component
+function TypingText({ text, className }) {
+    const [displayText, setDisplayText] = useState("");
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (currentIndex < text.length) {
+            const timeout = setTimeout(() => {
+                setDisplayText(prev => prev + text[currentIndex]);
+                setCurrentIndex(prev => prev + 1);
+            }, 100);
+            return () => clearTimeout(timeout);
+        }
+    }, [currentIndex, text]);
+
+    return <span className={className}>{displayText}<span className="animate-pulse">|</span></span>;
+}
 
 function Chip({children}) {
     return (
@@ -171,6 +217,13 @@ function useGithubRepos(username) {
 export default function App() {
     const {repos, loading} = useGithubRepos(CONFIG.githubUser);
     const year = useMemo(() => new Date().getFullYear(), []);
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll();
+    const scaleProgress = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
 
     const [darkMode, setDarkMode] = useState(() => {
         if (typeof window !== "undefined") {
@@ -178,6 +231,16 @@ export default function App() {
         }
         return false;
     });
+
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            setMousePosition({ x: e.clientX, y: e.clientY });
+        };
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
 
     const toggleDarkMode = () => {
         setDarkMode((prev) => {
@@ -192,67 +255,171 @@ export default function App() {
     };
 
     return (
-        <div
+        <div ref={containerRef}
             className="min-h-screen scroll-smooth bg-gradient-to-br from-zinc-50 via-white to-blue-50 text-zinc-900 antialiased dark:from-zinc-950 dark:via-zinc-900 dark:to-blue-950 dark:text-zinc-100">
-            {/* Hero Header with Gradient */}
+
+            {/* Progress Bar */}
+            <motion.div
+                className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 origin-left z-50"
+                style={{ scaleX: scrollYProgress }}
+            />
+
+            {/* Custom Cursor Trail */}
+            <motion.div
+                className="fixed w-6 h-6 border-2 border-blue-500 rounded-full pointer-events-none z-50 mix-blend-difference"
+                animate={{
+                    x: mousePosition.x - 12,
+                    y: mousePosition.y - 12,
+                }}
+                transition={{ type: "spring", stiffness: 500, damping: 28 }}
+            />
+
+            {/* Hero Header with 3D Effect */}
             <header
-                className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 px-4 py-24 text-white transition-all duration-500">
-                {/* Animated background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-blue-600/20 animate-gradient-x"></div>
+                className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 px-4 py-32 text-white transition-all duration-500">
 
-                {/* Glass effect overlay */}
-                <div className="absolute inset-0 backdrop-blur-3xl bg-white/5"></div>
+                {/* Floating Particles */}
+                <FloatingParticles />
 
-                <div className="relative mx-auto flex max-w-5xl flex-col gap-8">
+                {/* Animated Mesh Gradient */}
+                <div className="absolute inset-0 opacity-30">
                     <motion.div
-                        initial={{opacity: 0, y: 20}}
-                        animate={{opacity: 1, y: 0}}
-                        transition={{duration: 0.6, ease: "easeOut"}}
-                        className="space-y-4"
+                        className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
+                        animate={{
+                            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                        }}
+                        transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: "linear",
+                        }}
+                        style={{ backgroundSize: "200% 200%" }}
+                    />
+                </div>
+
+                {/* Neon Grid */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f46e510_1px,transparent_1px),linear-gradient(to_bottom,#4f46e510_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+
+                <div className="relative mx-auto flex max-w-5xl flex-col gap-10">
+                    <motion.div
+                        initial={{opacity: 0, scale: 0.9}}
+                        animate={{opacity: 1, scale: 1}}
+                        transition={{duration: 0.8, ease: "easeOut"}}
+                        className="space-y-6"
                     >
-                        <div className="inline-block">
-                            <span className="inline-block rounded-full bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-1.5 text-sm font-medium text-white shadow-lg">
+                        {/* Badge with pulse animation */}
+                        <motion.div
+                            className="inline-block"
+                            animate={{
+                                scale: [1, 1.05, 1],
+                            }}
+                            transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                            }}
+                        >
+                            <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-5 py-2 text-sm font-bold text-white shadow-[0_0_20px_rgba(59,130,246,0.5)] animate-pulse-glow">
+                                <Sparkles size={16} />
                                 {CONFIG.seeking}
+                                <Zap size={16} />
                             </span>
-                        </div>
-                        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-                            {CONFIG.name}
-                        </h1>
-                        <p className="mt-3 text-xl text-blue-100 font-medium">{CONFIG.role}</p>
-                        <p className="text-lg text-slate-300">{CONFIG.tagline}</p>
+                        </motion.div>
+
+                        {/* Name with 3D Text Effect */}
+                        <motion.h1
+                            className="text-6xl font-black tracking-tight sm:text-7xl lg:text-8xl"
+                            initial={{opacity: 0, y: 50}}
+                            animate={{opacity: 1, y: 0}}
+                            transition={{duration: 0.8, delay: 0.2}}
+                        >
+                            <span className="inline-block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform duration-300">
+                                {CONFIG.name}
+                            </span>
+                        </motion.h1>
+
+                        {/* Typing Animation for Role */}
+                        <motion.div
+                            initial={{opacity: 0}}
+                            animate={{opacity: 1}}
+                            transition={{duration: 0.8, delay: 0.5}}
+                        >
+                            <p className="text-2xl sm:text-3xl font-bold text-blue-200 flex items-center gap-2">
+                                <Rocket className="inline animate-bounce" size={28} />
+                                <TypingText text={CONFIG.role} className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-300" />
+                            </p>
+                        </motion.div>
+
+                        <motion.p
+                            className="text-xl text-slate-300 max-w-2xl"
+                            initial={{opacity: 0}}
+                            animate={{opacity: 1}}
+                            transition={{duration: 0.8, delay: 0.8}}
+                        >
+                            {CONFIG.tagline}
+                        </motion.p>
                     </motion.div>
 
                     <motion.nav
-                        initial={{opacity: 0, y: 10}}
+                        initial={{opacity: 0, y: 20}}
                         animate={{opacity: 1, y: 0}}
-                        transition={{duration: 0.6, delay: 0.2}}
-                        className="flex flex-wrap items-center gap-3"
+                        transition={{duration: 0.8, delay: 1}}
+                        className="flex flex-wrap items-center gap-4"
                     >
-                        <a href="#about" className="text-blue-100 hover:text-white transition-colors duration-200 font-medium">소개</a>
-                        <a href="#projects" className="text-blue-100 hover:text-white transition-colors duration-200 font-medium">프로젝트</a>
-                        <a href="#skills" className="text-blue-100 hover:text-white transition-colors duration-200 font-medium">기술</a>
-                        <a href="#contact" className="text-blue-100 hover:text-white transition-colors duration-200 font-medium">연락처</a>
-                        <button
+                        {["소개", "프로젝트", "기술", "연락처"].map((item, i) => (
+                            <motion.a
+                                key={item}
+                                href={`#${item === "소개" ? "about" : item === "프로젝트" ? "projects" : item === "기술" ? "skills" : "contact"}`}
+                                className="relative text-blue-100 hover:text-white transition-colors duration-200 font-bold text-lg group"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                {item}
+                                <motion.span
+                                    className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 group-hover:w-full transition-all duration-300"
+                                />
+                            </motion.a>
+                        ))}
+
+                        <motion.button
                             onClick={toggleDarkMode}
-                            className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm hover:bg-white/20 transition-all duration-200 font-medium"
+                            className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border-2 border-white/30 px-5 py-2.5 text-sm hover:bg-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 font-bold"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                         >
-                            {darkMode ? <Sun size={16}/> : <Moon size={16}/>}
-                            {darkMode ? "라이트 모드" : "다크 모드"}
-                        </button>
+                            {darkMode ? <Sun size={18} className="animate-spin-slow"/> : <Moon size={18}/>}
+                            {darkMode ? "라이트" : "다크"}
+                        </motion.button>
+
                         <div className="flex flex-1 justify-end gap-3">
-                            <a
+                            <motion.a
                                 href={`https://github.com/${CONFIG.githubUser}`}
                                 target="_blank"
-                                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm hover:bg-white/20 hover:scale-105 transition-all duration-200 font-medium"
+                                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border-2 border-white/30 px-5 py-2.5 text-sm hover:bg-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 font-bold"
+                                whileHover={{ scale: 1.05, rotate: 5 }}
+                                whileTap={{ scale: 0.95 }}
                             >
                                 <Github size={18}/> GitHub
-                            </a>
-                            <a
+                            </motion.a>
+                            <motion.a
                                 href={CONFIG.resumePath}
-                                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-2 text-sm hover:shadow-lg hover:scale-105 transition-all duration-200 font-medium"
+                                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-5 py-2.5 text-sm font-bold shadow-[0_0_20px_rgba(139,92,246,0.5)] hover:shadow-[0_0_30px_rgba(139,92,246,0.8)] transition-all duration-300"
+                                whileHover={{ scale: 1.05, y: -2 }}
+                                whileTap={{ scale: 0.95 }}
+                                animate={{
+                                    boxShadow: [
+                                        "0 0 20px rgba(139,92,246,0.5)",
+                                        "0 0 30px rgba(139,92,246,0.8)",
+                                        "0 0 20px rgba(139,92,246,0.5)",
+                                    ],
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                }}
                             >
-                                <FileDown size={18}/> 이력서
-                            </a>
+                                <FileDown size={18}/> 이력서 다운로드
+                            </motion.a>
                         </div>
                     </motion.nav>
                 </div>
@@ -271,74 +438,140 @@ export default function App() {
             </Section>
 
             <Section id="projects" title="프로젝트">
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    {CONFIG.projects.map((p, idx) => (
-                        <motion.article
-                            key={p.title}
-                            className="group relative overflow-hidden rounded-3xl border border-zinc-200/50 bg-white/50 backdrop-blur-sm p-6 shadow-lg hover:shadow-2xl dark:border-zinc-800/50 dark:bg-zinc-900/50 transition-all duration-300 hover:-translate-y-1"
-                            initial={{opacity: 0, y: 20}}
-                            whileInView={{opacity: 1, y: 0}}
-                            viewport={{once: true}}
-                            transition={{duration: 0.5, delay: idx * 0.1}}
-                        >
-                            {/* Gradient overlay on hover */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-purple-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-purple-500/5 group-hover:to-blue-500/5 transition-all duration-300 rounded-3xl"></div>
+                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                    {CONFIG.projects.map((p, idx) => {
+                        const cardRef = useRef(null);
+                        const isInView = useInView(cardRef, { once: true, amount: 0.3 });
 
-                            <div className="relative">
-                                <div className="mb-4 flex items-start justify-between">
-                                    <h3 className="text-2xl font-bold flex items-center gap-2 text-zinc-900 dark:text-white">
-                                        <span className="text-3xl">{p.emoji}</span>
-                                        <span className="bg-gradient-to-r from-zinc-900 via-blue-800 to-zinc-900 dark:from-white dark:via-blue-200 dark:to-white bg-clip-text text-transparent">
-                                            {p.title}
-                                        </span>
-                                    </h3>
-                                </div>
-                                <p className="mb-4 text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">{p.summary}</p>
-                                <ul className="mb-5 space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
-                                    {p.bullets.map((b, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"></span>
-                                            <span>{b}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <div className="mb-5 flex flex-wrap gap-2">
-                                    {p.tech.map((t) => {
-                                        const Icon = TECH_ICON[t];
-                                        return (
-                                            <span
-                                                key={t}
-                                                className="inline-flex items-center gap-1.5 rounded-full border border-blue-200/50 bg-blue-50/50 px-3 py-1.5 text-sm font-medium text-blue-700 dark:border-blue-800/50 dark:bg-blue-950/50 dark:text-blue-300 transition-colors"
+                        return (
+                            <motion.article
+                                key={p.title}
+                                ref={cardRef}
+                                className="group relative overflow-hidden rounded-3xl border-2 border-transparent bg-gradient-to-br from-white/80 via-blue-50/50 to-purple-50/50 backdrop-blur-xl p-8 shadow-[0_0_0_1px_rgba(59,130,246,0.1)] hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] dark:from-zinc-900/80 dark:via-blue-950/50 dark:to-purple-950/50 transition-all duration-500 hover:-translate-y-2 tilt-3d"
+                                initial={{opacity: 0, y: 50, rotateX: 10}}
+                                animate={isInView ? {opacity: 1, y: 0, rotateX: 0} : {}}
+                                transition={{duration: 0.8, delay: idx * 0.15, type: "spring"}}
+                                whileHover={{
+                                    scale: 1.02,
+                                    rotateY: 2,
+                                    rotateX: 2,
+                                }}
+                            >
+                                {/* Animated Border Gradient */}
+                                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+
+                                {/* Shimmer Effect */}
+                                <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 animate-shimmer transition-opacity duration-500"></div>
+
+                                {/* Neon Glow on Hover */}
+                                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-20 blur-2xl transition-all duration-500"></div>
+
+                                <div className="relative z-10">
+                                    {/* Project Header with Float Animation */}
+                                    <motion.div
+                                        className="mb-5 flex items-start justify-between"
+                                        whileHover={{ y: -5 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <h3 className="text-3xl font-black flex items-center gap-3 text-zinc-900 dark:text-white">
+                                            <motion.span
+                                                className="text-5xl"
+                                                animate={{
+                                                    rotate: [0, 10, -10, 0],
+                                                    scale: [1, 1.1, 1],
+                                                }}
+                                                transition={{
+                                                    duration: 2,
+                                                    repeat: Infinity,
+                                                    repeatDelay: 3,
+                                                }}
                                             >
-                                                {Icon ? <Icon size={14} aria-hidden/> : null}
-                                                {t}
+                                                {p.emoji}
+                                            </motion.span>
+                                            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                                                {p.title}
                                             </span>
-                                        );
-                                    })}
+                                        </h3>
+                                    </motion.div>
+
+                                    <p className="mb-5 text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed font-medium">{p.summary}</p>
+
+                                    <ul className="mb-6 space-y-3 text-base text-zinc-700 dark:text-zinc-300">
+                                        {p.bullets.map((b, i) => (
+                                            <motion.li
+                                                key={i}
+                                                className="flex items-start gap-3"
+                                                initial={{opacity: 0, x: -20}}
+                                                animate={isInView ? {opacity: 1, x: 0} : {}}
+                                                transition={{delay: 0.5 + i * 0.1}}
+                                            >
+                                                <motion.span
+                                                    className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                                                    animate={{
+                                                        scale: [1, 1.3, 1],
+                                                        boxShadow: [
+                                                            "0 0 0 0 rgba(59, 130, 246, 0.7)",
+                                                            "0 0 0 10px rgba(59, 130, 246, 0)",
+                                                        ],
+                                                    }}
+                                                    transition={{
+                                                        duration: 1.5,
+                                                        repeat: Infinity,
+                                                        delay: i * 0.2,
+                                                    }}
+                                                />
+                                                <span>{b}</span>
+                                            </motion.li>
+                                        ))}
+                                    </ul>
+
+                                    <div className="mb-6 flex flex-wrap gap-2">
+                                        {p.tech.map((t, i) => {
+                                            const Icon = TECH_ICON[t];
+                                            return (
+                                                <motion.span
+                                                    key={t}
+                                                    className="inline-flex items-center gap-2 rounded-full border-2 border-blue-300/50 bg-gradient-to-r from-blue-100/80 to-purple-100/80 px-4 py-2 text-sm font-bold text-blue-700 shadow-md hover:shadow-lg hover:scale-110 dark:border-blue-700/50 dark:from-blue-950/80 dark:to-purple-950/80 dark:text-blue-300 transition-all duration-300"
+                                                    initial={{opacity: 0, scale: 0}}
+                                                    animate={isInView ? {opacity: 1, scale: 1} : {}}
+                                                    transition={{delay: 0.8 + i * 0.05, type: "spring"}}
+                                                    whileHover={{ rotate: 5 }}
+                                                >
+                                                    {Icon ? <Icon size={16} aria-hidden/> : null}
+                                                    {t}
+                                                </motion.span>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <div className="flex gap-4">
+                                        {p.repo && (
+                                            <motion.a
+                                                href={p.repo}
+                                                target="_blank"
+                                                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-zinc-900 to-zinc-700 px-6 py-3 text-sm font-bold text-white shadow-lg hover:shadow-xl dark:from-white dark:to-zinc-100 dark:text-zinc-900 transition-all duration-300"
+                                                whileHover={{scale: 1.05, y: -2}}
+                                                whileTap={{scale: 0.95}}
+                                            >
+                                                <Code2 size={18}/> 코드 보기
+                                            </motion.a>
+                                        )}
+                                        {p.demo && (
+                                            <motion.a
+                                                href={p.demo}
+                                                target="_blank"
+                                                className="inline-flex items-center gap-2 rounded-full border-2 border-zinc-300 bg-white/50 px-6 py-3 text-sm font-bold hover:bg-white dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 transition-all duration-300 shadow-md hover:shadow-lg"
+                                                whileHover={{scale: 1.05, y: -2}}
+                                                whileTap={{scale: 0.95}}
+                                            >
+                                                <ExternalLink size={18}/> 데모
+                                            </motion.a>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="flex gap-3">
-                                    {p.repo && (
-                                        <a
-                                            href={p.repo}
-                                            target="_blank"
-                                            className="inline-flex items-center gap-2 rounded-full bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 transition-all duration-200 hover:scale-105"
-                                        >
-                                            <Code2 size={16}/> 코드 보기
-                                        </a>
-                                    )}
-                                    {p.demo && (
-                                        <a
-                                            href={p.demo}
-                                            target="_blank"
-                                            className="inline-flex items-center gap-2 rounded-full border border-zinc-300 px-4 py-2.5 text-sm font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900 transition-all duration-200 hover:scale-105"
-                                        >
-                                            <ExternalLink size={16}/> 데모
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        </motion.article>
-                    ))}
+                            </motion.article>
+                        );
+                    })}
                 </div>
             </Section>
 
@@ -378,21 +611,42 @@ export default function App() {
 
             <Section id="skills" title="기술">
                 <div className="flex flex-wrap gap-3">
-                    {CONFIG.skills.map((s, idx) => (
-                        <motion.div
-                            key={s.name}
-                            initial={{opacity: 0, scale: 0.8}}
-                            whileInView={{opacity: 1, scale: 1}}
-                            viewport={{once: true}}
-                            transition={{duration: 0.3, delay: idx * 0.05}}
-                            className="group"
-                        >
-                            <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 shadow-sm hover:shadow-md hover:scale-105 hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-blue-700 dark:hover:bg-blue-950 transition-all duration-200">
-                                <s.icon size={18} className="group-hover:scale-110 transition-transform" aria-hidden/>
-                                {s.name}
-                            </span>
-                        </motion.div>
-                    ))}
+                    {CONFIG.skills.map((s, idx) => {
+                        // 각 기술별 고유 색상 정의
+                        const iconColors = {
+                            "Java": "text-[#007396]",
+                            "Spring Boot": "text-[#6DB33F]",
+                            "MyBatis": "text-[#EC1C24]",
+                            "JPA": "text-[#59666C]",
+                            "MariaDB": "text-[#003545]",
+                            "REST API": "text-[#0080FF]",
+                            "React": "text-[#61DAFB]",
+                            "Thymeleaf": "text-[#005F0F]",
+                            "Swagger": "text-[#85EA2D]",
+                            "Git/GitHub": "text-[#F05032]",
+                            "JSP": "text-[#F89820]"
+                        };
+
+                        return (
+                            <motion.div
+                                key={s.name}
+                                initial={{opacity: 0, scale: 0.8}}
+                                whileInView={{opacity: 1, scale: 1}}
+                                viewport={{once: true}}
+                                transition={{duration: 0.3, delay: idx * 0.05}}
+                                className="group"
+                            >
+                                <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 shadow-sm hover:shadow-md hover:scale-105 hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-blue-700 dark:hover:bg-blue-950 transition-all duration-200">
+                                    <s.icon
+                                        size={18}
+                                        className={`group-hover:scale-110 transition-transform ${iconColors[s.name] || 'text-blue-600'}`}
+                                        aria-hidden
+                                    />
+                                    {s.name}
+                                </span>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </Section>
 
